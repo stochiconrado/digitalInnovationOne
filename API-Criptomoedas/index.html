@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title>CoinMarketCap</title>
+  </head>
+  <body>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Coin Market Cap</li>
+      </ol>
+    </nav>
+  
+    <div class="d-flex p-3 bd-highlight">
+      <div id='coins'></div>
+    </div>
+
+    <script type="text/javascript">
+     
+      var apikey = {
+        key: '97357fcd-bdbd-4563-8749-d99a9f1dd8f6'
+      }
+
+      fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=' + apikey.key)
+        .then((response) => {
+          if(!response.ok) throw new Error('Erro ao executar a requisição, status ' + response.status);
+          return response.json();
+        })
+        .then((api) => {
+         
+          var texto = "";
+          for (let i=0;i<5;i++){
+            texto = texto + `
+              <div class="media">
+                <img src="coin.png" alt="coin" class="align-self-center mr-3" width="100" height="90"> 
+                <div class="media-body">
+                  <h5 class="mt-2">${api.data[i].id}</h5>
+                  <p>${api.data[i].name}</p>
+                  <p>Symbol: ${api.data[i].slymbol}</p>
+                  <p>Slug: ${api.data[i].slug}</p>
+                  <p>Primeira Aparição: ${api.data[i].date_added}</p>
+                  <p>Total Moeda: ${api.data[i].total_supply}</p>
+                </div>
+              </div>
+            `;
+
+              document.getElementById("coins").innerHTML = texto;
+          }
+        })
+        .catch((error) =>{
+          console.error(error.message);
+        });
+    </script>
+  </body>
+</html>
